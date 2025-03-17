@@ -24,26 +24,22 @@ public class TokenValidationService {
 
     public Optional<User> validateToken(String token) {
         Optional<Token> tokenEntity = tokenRepository.findByToken(token);
-
         if (tokenEntity.isPresent()) {
             // If the token is found, retrieve the user based on userId
             Long userId = tokenEntity.get().getUserId();
             return userRepository.findById(userId);
         }
-        return Optional.empty();  // Token not found
+        return Optional.empty();
     }
 
-    public User register(User user){
+    public User register(User user) {
         User newUser = userRepository.save(user);
-        if (newUser != null) {
-            tokenRepository.save(new Token(generateToken(), newUser.getId()));
-        }
+        Token token = new Token();
+        token.setUserId(newUser.getId());
+        token.setToken(UUID.randomUUID().toString());
+        tokenRepository.save(token);
         return newUser;
-    }
 
-    private String generateToken() {
-        String token = UUID.randomUUID().toString();
-        return token;
     }
 
 }

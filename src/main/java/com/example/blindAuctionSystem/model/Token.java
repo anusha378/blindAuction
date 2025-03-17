@@ -17,7 +17,6 @@ public class Token {
 
     // Getters and Setters
 
-    public Token(String token, Long userId) {}
     public Long getId() {return id;}
     public String getToken() {return token;}
     public Long getUserId() {return userId;}

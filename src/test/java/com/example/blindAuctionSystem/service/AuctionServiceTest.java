@@ -1,12 +1,10 @@
-package service;
+package com.example.blindAuctionSystem.service;
 
 import com.example.blindAuctionSystem.model.Auction;
 import com.example.blindAuctionSystem.model.Bid;
 import com.example.blindAuctionSystem.model.Token;
 import com.example.blindAuctionSystem.model.User;
 import com.example.blindAuctionSystem.repository.TokenRepository;
-import com.example.blindAuctionSystem.service.AuctionService;
-import com.example.blindAuctionSystem.service.TokenValidationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -80,7 +78,9 @@ public class AuctionServiceTest {
         user.setName("John Doe");
         user.setEmail("john.doe@example.com");
         user.setId(5L);
-        Token token = new Token("opaque-token-123", user.getId());
+        Token token = new Token();
+        token.setUserId(user.getId());
+        token.setToken("opaque-token-123");
 
         // Mock the repository behavior
         when(auctionRepository.findById(1L)).thenReturn(Optional.of(auction));

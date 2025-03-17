@@ -1,6 +1,5 @@
-package controller;
+package com.example.blindAuctionSystem.controller;
 
-import com.example.blindAuctionSystem.controller.AuctionController;
 import com.example.blindAuctionSystem.model.Auction;
 import com.example.blindAuctionSystem.model.Bid;
 import org.junit.Before;

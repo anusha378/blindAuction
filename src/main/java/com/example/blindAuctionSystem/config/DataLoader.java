@@ -19,7 +19,9 @@ public class DataLoader {
             user.setEmail("john.doe@example.com");
             userRepository.save(user);
 
-            Token token = new Token("opaque-token-123", user.getId());
+            Token token = new Token();
+            token.setUserId(user.getId());
+            token.setToken("opaque-token-123");
             tokenRepository.save(token);
         };
     }

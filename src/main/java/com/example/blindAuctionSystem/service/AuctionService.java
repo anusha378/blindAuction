@@ -34,7 +34,7 @@ public class AuctionService {
         }
 
         if (tokenValidationService.validateToken(token).isEmpty()) {
-            throw new IllegalArgumentException("Invalid token");
+            return "User is not Registered";
         }
 
         Auction auction = auctionOpt.get();
