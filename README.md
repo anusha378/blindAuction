@@ -28,7 +28,7 @@ Maven: Used to build and manage dependencies.
 Running the Application
 
 Clone the repository:
-git clone https://github.com/your-repository/blind-auction.git
+git clone https://github.com/your-repository/blind-auction.git](https://github.com/anusha378/blindAuction.git
 cd blind-auction
 Build the project:  mvn clean install
 Run the application:  mvn spring-boot:run
