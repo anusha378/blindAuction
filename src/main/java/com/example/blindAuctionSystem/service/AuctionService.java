@@ -1,11 +1,11 @@
-package service;
+package com.example.blindAuctionSystem.service;
 
-import model.Auction;
-import model.Bid;
+import com.example.blindAuctionSystem.model.Auction;
+import com.example.blindAuctionSystem.model.Bid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import repository.AuctionRepository;
-import repository.BidRepository;
+import com.example.blindAuctionSystem.repository.AuctionRepository;
+import com.example.blindAuctionSystem.repository.BidRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,24 +20,26 @@ public class AuctionService {
     @Autowired
     private BidRepository bidRepository;
 
+    @Autowired
+    TokenValidationService tokenValidationService;
+
     public Auction createAuction(Auction auction) {
         return auctionRepository.save(auction);
     }
 
-    public String placeBid(Long auctionId, double bidAmount, String bidder) {
+    public String placeBid(Long auctionId, double bidAmount, String token) {
         Optional<Auction> auctionOpt = auctionRepository.findById(auctionId);
         if (auctionOpt.isEmpty()) {
             return "Auction not found";
         }
 
+        if (tokenValidationService.validateToken(token).isEmpty()) {
+            throw new IllegalArgumentException("Invalid token");
+        }
+
         Auction auction = auctionOpt.get();
         if (bidAmount > auction.getStartingPrice()) {
-            Bid bid = new Bid();
-            bid.setAmount(bidAmount);
-            bid.setBidder(bidder);
-            bid.setBidPlacedAt(LocalDateTime.now());
-            bid.setAuction(auction);
-            bidRepository.save(bid);
+            bidRepository.save(new Bid(bidAmount, token, LocalDateTime.now(), auction));
             return "Bid placed successfully!";
         } else {
             return "Bid is lower than the starting price!";

@@ -1,11 +1,11 @@
-package controller;
+package com.example.blindAuctionSystem.controller;
 
-import model.Auction;
-import model.Bid;
+import com.example.blindAuctionSystem.model.Auction;
+import com.example.blindAuctionSystem.model.Bid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.AuctionService;
+import com.example.blindAuctionSystem.service.AuctionService;
 
 import java.util.List;
 

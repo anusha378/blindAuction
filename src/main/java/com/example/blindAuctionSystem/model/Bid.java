@@ -1,4 +1,4 @@
-package model;
+package com.example.blindAuctionSystem.model;
 
 
 import jakarta.persistence.*;
@@ -16,21 +16,25 @@ public class Bid {
     private Long id;
 
     private double amount;
-    private String bidder;
+    private String userToken;
     private LocalDateTime bidPlacedAt;
 
     @ManyToOne
     @JoinColumn(name = "auction_id")
     private Auction auction;
 
-//    protected Bid(double amount, String bidder, LocalDateTime bidPlacedAt, Auction auction) {
-//        this.amount = amount;
-//        this.bidder = bidder;
-//        this.bidPlacedAt = bidPlacedAt;
-//        this.auction = auction;
-//    }
 
     // getters and setters
 
+
+    public Bid(double amount, String userToken, LocalDateTime bidPlacedAt, Auction auction) {
+        this.amount = amount;
+        this.userToken = userToken;
+        this.bidPlacedAt = bidPlacedAt;
+        this.auction = auction;
+    }
+
+    public Bid() {
+    }
 }
 

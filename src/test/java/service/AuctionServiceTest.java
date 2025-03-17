@@ -1,7 +1,12 @@
 package service;
 
-import model.Auction;
-import model.Bid;
+import com.example.blindAuctionSystem.model.Auction;
+import com.example.blindAuctionSystem.model.Bid;
+import com.example.blindAuctionSystem.model.Token;
+import com.example.blindAuctionSystem.model.User;
+import com.example.blindAuctionSystem.repository.TokenRepository;
+import com.example.blindAuctionSystem.service.AuctionService;
+import com.example.blindAuctionSystem.service.TokenValidationService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -9,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import repository.AuctionRepository;
-import repository.BidRepository;
+import com.example.blindAuctionSystem.repository.AuctionRepository;
+import com.example.blindAuctionSystem.repository.BidRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,8 +36,14 @@ public class AuctionServiceTest {
     @Mock
     private BidRepository bidRepository;
 
+    @Mock
+    private TokenRepository tokenRepository;
+
     @InjectMocks
     private AuctionService auctionService;
+
+    @Mock
+    private TokenValidationService tokenValidationService;
 
     @Test
     public void testCreateAuction() {
@@ -63,11 +74,20 @@ public class AuctionServiceTest {
         bid.setAuction(auction);
         bid.setBidPlacedAt(LocalDateTime.now());
         bid.setAmount(120.0);
-        bid.setBidder("Bidder1");
+        bid.setUserToken("Bidder1");
+
+        User user = new User();
+        user.setName("John Doe");
+        user.setEmail("john.doe@example.com");
+        user.setId(5L);
+        Token token = new Token("opaque-token-123", user.getId());
 
         // Mock the repository behavior
         when(auctionRepository.findById(1L)).thenReturn(Optional.of(auction));
         when(bidRepository.save(ArgumentMatchers.any())).thenReturn(bid);
+        when(tokenValidationService.validateToken(ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(tokenRepository.findByToken(ArgumentMatchers.any())).thenReturn(Optional.of(token));
+
 
         // When
         String response = auctionService.placeBid(1L, 120.0, "Bidder1");
@@ -89,21 +109,21 @@ public class AuctionServiceTest {
         bid1.setAuction(auction);
         bid1.setBidPlacedAt(LocalDateTime.of(2025, 3, 15, 10, 30, 0));
         bid1.setAmount(150.0);
-        bid1.setBidder("Bidder1");
+        bid1.setUserToken("Bidder1");
         bids.add(bid1);
 
         Bid bid2 = new Bid();
         bid2.setAuction(auction);
         bid2.setBidPlacedAt(LocalDateTime.of(2025, 3, 15, 9, 0, 0));
         bid2.setAmount(200.0);
-        bid2.setBidder("Bidder2");
+        bid2.setUserToken("Bidder2");
         bids.add(bid2);
 
         Bid bid3 = new Bid();
         bid3.setAuction(auction);
         bid3.setBidPlacedAt(LocalDateTime.of(2025, 3, 15, 12, 0, 0));
         bid3.setAmount(200.0);
-        bid3.setBidder("Bidder3");
+        bid3.setUserToken("Bidder3");
         bids.add(bid3);
 
         when(auctionRepository.findById(1L)).thenReturn(Optional.of(auction));
@@ -111,7 +131,7 @@ public class AuctionServiceTest {
 
         Bid successfulBid = auctionService.getSuccessfulBid(auction.getId());
         assertNotNull(successfulBid);
-        assertEquals("Bidder2", successfulBid.getBidder());
+        assertEquals("Bidder2", successfulBid.getUserToken());
 
     }
 

@@ -1,9 +1,7 @@
-package repository;
+package com.example.blindAuctionSystem.repository;
 
-import model.Auction;
+import com.example.blindAuctionSystem.model.Auction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
-    Auction save(Auction auction);
-
 }

@@ -1,7 +1,8 @@
 package controller;
 
-import model.Auction;
-import model.Bid;
+import com.example.blindAuctionSystem.controller.AuctionController;
+import com.example.blindAuctionSystem.model.Auction;
+import com.example.blindAuctionSystem.model.Bid;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
-import service.AuctionService;
+import com.example.blindAuctionSystem.service.AuctionService;
 
 import java.time.LocalDateTime;
 
@@ -69,7 +70,7 @@ public class AuctionControllerTest {
 
         Bid bid = new Bid();
         bid.setAmount(500.00);
-        bid.setBidder("Bidder1");
+        bid.setUserToken("Bidder1");
         bid.setAuction(auction);
         bid.setBidPlacedAt(LocalDateTime.now());
 
